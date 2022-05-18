@@ -1,6 +1,6 @@
 use std::path::Path;
 use std::fs::File;
-use std::io::{prelude::*, BufReader};
+use std::io::{self,prelude::*, BufReader};
 use regex::Regex;
 use std::process::exit;
 
@@ -98,7 +98,8 @@ fn main() {
                 println!("*")
             }
             else if _count % 1000 == 0 {
-                print!(".")
+                print!(".");
+                io::stdout().flush().ok().expect("Could not flush stdout");
             }
     //        println!("Looking for {}",t);
             for t in &target_set {
@@ -121,6 +122,20 @@ fn main() {
         }
 
     } else {
+        for x in &input_set {
+            _count += 1;	
+            if _count % 100000 == 0 {
+                println!("*")
+            }
+            else if _count % 1000 == 0 {
+                print!(".");
+                io::stdout().flush().ok().expect("Could not flush stdout");
+            }
+            let search_range = cmd_line.start-x..=cmd_line.end-x;
+                for y in input_set.range(search_range) {
+                    result_set.insert(x+y);
+                }
+        }       
 
     }
     println!("Time to sum {:.2?}",before.elapsed());

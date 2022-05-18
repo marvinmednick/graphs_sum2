@@ -5,8 +5,8 @@ use clap::{Arg, Command};
 #[derive(Debug)]
 pub struct CommandArgs  {
     pub filename: String,
-    pub start: i32,
-    pub end: i32,
+    pub start: i64,
+    pub end: i64,
     pub option1: bool,
 }
 
@@ -62,7 +62,7 @@ impl CommandArgs  {
         let start = match start_str {
             None => { println!("Start is None..."); 0},
             Some(s) => {
-                match s.parse::<i32>() {
+                match s.parse::<i64>() {
                     Ok(n) => n,
                     Err(_) => {println!("That's not a number! {}", s); 0},
                 }
@@ -73,7 +73,7 @@ impl CommandArgs  {
         let end = match end_str {
             None => { println!("End is None..."); 0},
             Some(s) => {
-                match s.parse::<i32>() {
+                match s.parse::<i64>() {
                     Ok(n) => n,
                     Err(_) => {println!("That's not a number! {}", s); 0},
                 }
