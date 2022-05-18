@@ -86,18 +86,23 @@ fn main() {
     println!("Target size is {} ",target_set.len());
 
 
-    for t in target_set {
+    let before = Instant::now();
+    for x in &input_set {
 //        println!("Looking for {}",t);
-        for x in &input_set {
-            let y = t - x;
+        for t in &target_set {
+            let target = t.clone();
+            let y = target - x;
             if input_set.contains(&y) {
-                result_set.insert(t);
+                result_set.insert(target);
+                // remove t from the target set so we don't look for it any more
+                target_set.remove(&target);
                 break;
             }
 
         }
 
     }
+    println!("Time to sum {:.2?}",before.elapsed());
     println!("Output: Result size {}",result_set.len());
 
 }
