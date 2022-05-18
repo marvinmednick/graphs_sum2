@@ -7,6 +7,7 @@ pub struct CommandArgs  {
     pub filename: String,
     pub start: i32,
     pub end: i32,
+    pub option1: bool,
 }
 
 impl CommandArgs  {
@@ -37,10 +38,17 @@ impl CommandArgs  {
             .allow_hyphen_values(true)
             .help("highest value for t");
 
+        // Define the starting value option
+        let opt1_option = Arg::new("opt1")
+            .long("opt1")
+            .takes_value(false)
+            .help("use option 1 sum -- hashset lookup");
+
         // now add in the argument we want to parse
         let mut app = app.arg(filename_option);
         app = app.arg(start_option);
         app = app.arg(end_option);
+        app = app.arg(opt1_option);
 
         // extract the matches
         let matches = app.get_matches();
@@ -71,8 +79,8 @@ impl CommandArgs  {
                 }
             }
         };
-        println!("clap args: {} {} {}",filename,start,end); 
+        println!("clap args: {} {} {} {}",filename,start,end,matches.is_present("opt1")); 
 
-        CommandArgs { filename: filename.to_string(), start: start, end: end }
+        CommandArgs { filename: filename.to_string(), start: start, end: end ,option1: matches.is_present("opt1")}
     }   
 }

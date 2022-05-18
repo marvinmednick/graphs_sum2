@@ -35,6 +35,7 @@ fn main() {
     let mut input_set = BTreeSet::<i64>::new();
     let mut target_set = HashSet::<i64>::new();
     let mut result_set = HashSet::<i64>::new();
+    let mut skip_set = HashSet::<i64>::new();
     let before = Instant::now();
     for i in cmd_line.start..=cmd_line.end {
         target_set.insert(i as i64);
@@ -85,25 +86,46 @@ fn main() {
     println!("Resulting in  {} unique entries",input_set.len());
     println!("Target size is {} ",target_set.len());
 
+//    println!("Input {:?} Target {:?}",input_set,target_set);
 
     let before = Instant::now();
-    for x in &input_set {
-//        println!("Looking for {}",t);
-        for t in &target_set {
-            let target = t.clone();
-            let y = target - x;
-            if input_set.contains(&y) {
-                result_set.insert(target);
-                // remove t from the target set so we don't look for it any more
-                target_set.remove(&target);
-                break;
+
+    _count = 0;
+    if cmd_line.option1 {
+        for x in &input_set {
+            _count += 1;	
+            if _count % 100000 == 0 {
+                println!("*")
+            }
+            else if _count % 1000 == 0 {
+                print!(".")
+            }
+    //        println!("Looking for {}",t);
+            for t in &target_set {
+                if skip_set.contains(&t) {
+                    continue;
+                }
+               // println!("Checking {}",t);
+                let target = t.clone();
+                let y = target - x;
+                if input_set.contains(&y) {
+                //    println!("Found {}",target);
+                    result_set.insert(target.clone());
+                    // remoue t from the target set so we don't look for it any more
+                    skip_set.insert(target);
+                    //println!("Input {:?} Target {:?}",input_set,target_set);
+                }
+
             }
 
         }
 
+    } else {
+
     }
     println!("Time to sum {:.2?}",before.elapsed());
     println!("Output: Result size {}",result_set.len());
+ //   println!("Result {:?}",result_set);
 
 }
 
